@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Todo App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* CSS Styles for the Todo App */
+
+    /* Box-sizing for all elements */
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Body styles */
+    body {
+      font-size: 15px;
+      font-family: 'Open Sans', sans-serif;
+      color: #444;
+      padding: 50px 20px;
+      margin: 0;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Todo wrapper styles */
+    .todo-wrapper {
+      width: 400px;
+      max-width: 100%;
+      min-height: 500px;
+      margin: 20px auto 40px;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 40px 20px;
+      -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
+      box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
+      background-color: #f4f7fc;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Todo title styles */
+    .todo-title {
+      font-size: 1.2em;
+      color: #40c057;
+      /* Changed to green */
+      font-weight: normal;
+    }
+
+    /* Form styles */
+    form {
+      overflow: overlay;
+    }
+
+    form label {
+      display: block;
+      text-align: center;
+      font-size: 1.2em;
+    }
+
+    /* Button and input styles */
+    .btn,
+    input {
+      line-height: 2em;
+      border-radius: 3px;
+      border: 0;
+      display: inline-block;
+      margin: 15px 0;
+      padding: 0.2em 1em;
+      font-size: 1em;
+    }
+
+    input[type='text'] {
+      border: 1px solid #ddd;
+      min-width: 80%;
+      transition: all ease-in 0.25s;
+    }
+
+    input:focus {
+      outline: none;
+      border: 1px solid #a3b1ff;
+    }
+
+    input::placeholder {
+      color: rgba(0, 0, 0, 0.3);
+      font-style: italic;
+    }
+
+    /* Add button styles */
+    .btn {
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    .btn-add {
+      background: #ddd;
+      color: #fefefe;
+      border-color: #ddd;
+      min-width: 17%;
+      pointer-events: none;
+      transition: all ease-in 0.25s;
+      font-size: 2.2em;
+      line-height: 0.5em;
+      padding: 0.3em 0.3em;
+      float: right;
+    }
+
+    .btn-add.active {
+      background: #40c057;
+      /* Changed to green */
+      border-color: #40c057;
+      /* Changed to green */
+      pointer-events: visible;
+    }
+
+    .btn-add.active:hover {
+      background: #339d4b;
+      /* Changed to green */
+      border-color: #339d4b;
+      /* Changed to green */
+    }
+
+    .btn-add:active {
+      transform: scale(0.95);
+    }
+
+    /* Control buttons styles */
+    .control-buttons {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Secondary button styles */
+    .btn-secondary {
+      display: inline-block;
+      position: relative;
+      border: 0;
+      padding: 0;
+      margin: 0 10px;
+    }
+
+    .btn-secondary:after {
+      position: absolute;
+      content: '';
+      width: 0;
+      height: 3px;
+      background-color: #40c057;
+      /* Changed to green */
+      bottom: 0px;
+      left: 0;
+      transition: all ease-in 0.25s;
+    }
+
+    .btn-secondary:hover:after {
+      width: 100%;
+      background-color: #40c057;
+      /* Changed to green */
+    }
+
+    /* Todo list styles */
+    ul.todo-list {
+      padding: 0;
+      margin-bottom: 30px;
+    }
+
+    ul.todo-list li {
+      position: relative;
+      list-style-type: none;
+      display: block;
+      margin: 10px 0;
+      background: #e0e8f5;
+      border-radius: 3px;
+      padding-left: 38px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      padding-right: 49px;
+      overflow: hidden;
+    }
+
+    ul.todo-list.archived li {
+      background: #fff;
+    }
+
+    /* Todo item text styles */
+    .todo-text {
+      position: relative;
+      display: inline-block;
+      padding: 0 0.5em;
+    }
+
+    /* Delete button styles */
+    ul.todo-list li .delete {
+      position: absolute;
+      height: 100%;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      cursor: pointer;
+      opacity: 0;
+      width: 0;
+      background-color: #40c057;
+      /* Changed to green */
+      color: #fff;
+      transition: all ease-in 0.25s;
+    }
+
+    ul.todo-list li .delete:after {
+      position: absolute;
+      content: '';
+      width: 16px;
+      height: 16px;
+      top: 50%;
+      left: 50%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      transform: translate(-50%, -50%) scale(0.5);
+      transition: all ease-in 0.25s;
+    }
+
+    ul.todo-list li:hover .delete {
+      width: 44px;
+      opacity: 1;
+    }
+
+    ul.todo-list li:hover .delete:after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Todo checkbox styles */
+    .todo-checkbox {
+      position: absolute;
+      opacity: 0;
+      display: none;
+    }
+
+    .todo-checkbox+label {
+      position: absolute;
+      cursor: pointer;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      border-radius: 2px;
+      border: 1px solid #cfdcec;
+      background-color: #fff;
+    }
+
+    .todo-checkbox:checked+label:after {
+      position: absolute;
+      content: '';
+      top: 30%;
+      left: 50%;
+      height: 3px;
+      width: 6px;
+      border: solid #fc6c48;
+      border-width: 0 0 2px 2px;
+      transform-origin: center center;
+      transform: rotate(-45deg) translate(-50%, -50%);
+    }
+
+    .todo-checkbox:checked+label:after {
+      display: block;
+    }
+
+    .todo-checkbox:checked~.todo-text {
+      color: #888;
+      text-decoration: line-through
+    }
+
+    /* Status styles */
+    .status.free {
+      font-weight: bold;
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    /* Transition styles */
+    .todo-item-enter-active,
+    .todo-item-leave-active {
+      transition: opacity ease 0.25s, transform ease-in-out 0.3s;
+      transform-origin: left center;
+    }
+
+    .todo-item-enter,
+    .todo-item-leave-to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+
+    .slide-fade-enter-active,
+    .slide-fade-leave-active {
+      transition: all 0.3s ease;
+    }
+
+    .slide-fade-enter,
+    .slide-fade-leave-to {
+      transform: scale(1.1);
+      opacity: 0;
+    }
+
+    /* Background select styles */
+    .background-select {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    /* Footer styles */
+    footer {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      color: #444;
+      bottom: 20px;
+      left: 0;
+      background-color: #333;
+      padding: 10px 0;
+    }
+
+    footer a {
+      color: #fff;
+      margin: 0 5px;
+      font-size: 20px;
+    }
+
+    footer .credits {
+      color: #888;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Todo App HTML Markup -->
+  <div id="app">
+    <section class="todo-wrapper">
+      <h1 class="todo-title">{{ today.day }}<br>{{ today.date }}</h1>
+      <div class="background-select">
+        <select id="backgroundSelect" v-model="background">
+          <option value="https://cdn.pixabay.com/photo/2016/11/10/14/16/background-1814372_1280.jpg">Background 1
+          </option>
+          <option value="https://cdn.pixabay.com/photo/2017/05/23/05/33/flower-2336287_1280.jpg">Background 2</option>
+          <option value="https://cdn.pixabay.com/photo/2018/04/25/17/07/flower-3350053_1280.jpg">Background 3</option>
+          <option value="https://cdn.pixabay.com/photo/2020/09/06/05/15/flowers-5548043_1280.jpg">Background 4</option>
+          <option value="https://cdn.pixabay.com/photo/2019/08/09/15/10/flowers-4395240_1280.jpg">Background 5</option>
+          <option value="https://cdn.pixabay.com/photo/2023/04/09/05/22/flowers-7910753_1280.png">Background 6</option>
+          <option value="https://cdn.pixabay.com/photo/2023/04/18/20/21/flowers-7935944_1280.jpg">Background 7</option>
+          <option value="https://cdn.pixabay.com/photo/2023/03/10/18/42/pattern-7842948_1280.png">Background 8</option>
+        </select>
+      </div>
+      <form @keydown.enter.prevent="">
+        <input type="text" class="input-todo" v-bind:class="{ active: new_todo }"
+          placeholder="Add all the to-dos you want to complete here." v-model="new_todo" v-on:keyup.enter="addItem">
+        <div class="btn btn-add" v-bind:class="{ active: new_todo }" @click="addItem">+</div>
+      </form>
+
+      <div v-if="pending.length > 0">
+        <p class="status busy">You have {{ pending.length }} pending item<span v-if="pending.length>1">s</span></p>
+        <transition-group name="todo-item" tag="ul" class="todo-list">
+          <li v-for="(item, index) in pending" v-bind:key="item.title">
+            <input class="todo-checkbox" v-bind:id="'item_' + item.id" v-model="item.done" type="checkbox">
+            <label v-bind:for="'item_' + item.id"></label>
+            <span class="todo-text">{{ item.title }}</span>
+            <span class="delete" @click="deleteItem(item)"></span>
+          </li>
+        </transition-group>
+      </div>
+
+      <transition name="slide-fade">
+        <p class="status free" v-if="!pending.length">"Believe you can and you're halfway there." - Theodore Roosevelt
+        </p>
+      </transition>
+
+      <div v-if="completed.length > 0 && showComplete">
+        <p class="status">Completed tasks: {{ completedPercentage }}</p>
+        <transition-group name="todo-item" tag="ul" class="todo-list archived">
+          <li v-for="(item, index) in completed" v-bind:key="item.title">
+            <input class="todo-checkbox" v-bind:id="'item_' + item.id" v-model="item.done" type="checkbox">
+            <label v-bind:for="'item_' + item.id"></label>
+            <span class="todo-text">{{ item.title }}</span>
+            <span class="delete" @click="deleteItem(item)"></span>
+          </li>
+        </transition-group>
+      </div>
+      <div class="control-buttons">
+        <div class="btn btn-secondary" v-if="completed.length > 0" @click="toggleShowComplete"><span
+            v-if="!showComplete">Show</span><span v-else>Hide</span> Complete</div>
+        <div class="btn btn-secondary" v-if="todoList.length > 0" @click="clearAll">Clear All</div>
+      </div>
+    </section>
+  </div>
+  <footer>
+    <div class="max-width">
+      <div class="socials">
+        <a href="https://www.linkedin.com/in/tabitha-dev/"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/tabitha-dev"><i class="fab fa-github"></i></a>
+        <a href="https://codepen.io/tabitha-dev"><i class="fab fa-codepen"></i></a>
+        <a href="https://replit.com/@TabithaK"><i class="fab fa-replit"></i></a>
+      </div>
+      <div class="credits">
+        Designed and developed by Tabitha-Dev | All rights reserved. <a href="https://code.tabitha.dev/"
+          style="font-size: 12px;">https://code.tabitha.dev/</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+  <script>
+    // Vue.js Code
+
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          todoList: [
+            {"id": 0, "title": "Todo Example 1", "done": false},
+            {"id": 1, "title": "Todo Example 2", "done": false},
+            {"id": 4, "title": "Todo Example 3", "done": true}
+          ],
+          new_todo: '',
+          showComplete: false,
+          background: "https://cdn.pixabay.com/photo/2016/11/10/14/16/background-1814372_1280.jpg"
+        };
+      },
+      mounted() {
+        this.getTodos();
+        this.setBackground();
+      },
+      watch: {
+        todoList: {
+          handler: function (updatedList) {
+            localStorage.setItem('todo_list', JSON.stringify(updatedList));
+          },
+          deep: true
+        },
+        background: function (newBackground) {
+          document.body.style.backgroundImage = `url(${newBackground})`;
+        }
+      },
+      computed: {
+        pending: function () {
+          return this.todoList.filter(function (item) {
+            return !item.done;
+          })
+        },
+        completed: function () {
+          return this.todoList.filter(function (item) {
+            return item.done;
+          });
+        },
+        completedPercentage: function () {
+          return (Math.floor((this.completed.length / this.todoList.length) * 100)) + "%";
+        },
+        today: function () {
+          var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+          var today = new Date();
+          var dd = today.getDate();
+          var mm = today.getMonth() + 1;
+          var yyyy = today.getFullYear();
+
+          if (dd < 10) {
+            dd = '0' + dd
+          }
+
+          if (mm < 10) {
+            mm = '0' + mm
+          }
+
+          today = {
+            day: weekday[today.getDay()],
+            date: mm + '-' + dd + '-' + yyyy,
+          }
+
+          return (today);
+        }
+      },
+      methods: {
+        // Get todos from local storage
+        getTodos() {
+          if (localStorage.getItem('todo_list')) {
+            this.todoList = JSON.parse(localStorage.getItem('todo_list'));
+          }
+        },
+
+        // Add a new item to the todo list
+        addItem() {
+          if (this.new_todo) {
+            this.todoList.unshift({
+              id: this.todoList.length,
+              title: this.new_todo,
+              done: false,
+            });
+          }
+
+          this.new_todo = '';
+
+          return true;
+        },
+
+        // Delete an item from the todo list
+        deleteItem(item) {
+          this.todoList.splice(this.todoList.indexOf(item), 1);
+        },
+
+        // Toggle the visibility of completed tasks
+        toggleShowComplete() {
+          this.showComplete = !this.showComplete;
+        },
+
+        // Clear all items from the todo list
+        clearAll() {
+          this.todoList = [];
+        },
+
+        // Set the background image
+        setBackground() {
+          document.body.style.backgroundImage = `url(${this.background})`;
+        }
+      },
+    });
+  </script>
+</body>
+
+</html>
