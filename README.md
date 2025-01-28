@@ -73,8 +73,10 @@ Take the app to the next level with these ideas:
 
 ## 📋 Code Highlights
 
+## 📋 Code Highlights
+
 ### Add New Todo:
-```javascript
+
 addItem() {
   if (this.new_todo) {
     this.todoList.unshift({
@@ -85,6 +87,10 @@ addItem() {
   }
   this.new_todo = '';
 }
+
+
+
+
 ---
 ## 🌈 Dynamic Background Change
 setBackground() {
