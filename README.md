@@ -73,48 +73,59 @@ Take the app to the next level with these ideas:
 
 ## 📋 Code Highlights
 
-## 📋 Code Highlights
-
 ### Add New Todo:
 
-addItem() {
-  if (this.new_todo) {
-    this.todoList.unshift({
-      id: this.todoList.length,
-      title: this.new_todo,
-      done: false,
-    });
-  }
-  this.new_todo = '';
-}
-
-
-
+`addItem() {`  
+&nbsp;&nbsp;`if (this.new_todo) {`  
+&nbsp;&nbsp;&nbsp;&nbsp;`this.todoList.unshift({`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`id: this.todoList.length,`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`title: this.new_todo,`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`done: false,`  
+&nbsp;&nbsp;&nbsp;&nbsp;`});`  
+&nbsp;&nbsp;`}`  
+&nbsp;&nbsp;`this.new_todo = '';`  
+`}`  
 
 ---
-## 🌈 Dynamic Background Change
-setBackground() {
-  document.body.style.backgroundImage = `url(${this.background})`;
-}
+
+### 🌈 Dynamic Background Change:
+
+`setBackground() {`  
+&nbsp;&nbsp;`document.body.style.backgroundImage = url(${this.background});`  
+`}`  
+
 ---
-## 🔄 Toggle Completed Tasks Visibility
-toggleShowComplete() {
-  this.showComplete = !this.showComplete;
-}
+
+### 🔄 Toggle Completed Tasks Visibility:
+
+`toggleShowComplete() {`  
+&nbsp;&nbsp;`this.showComplete = !this.showComplete;`  
+`}`  
+
 ---
+
 ## 🌐 Social Links
-Designed and developed by Tabitha-Dev. Connect with me:
 
-LinkedIn
-GitHub
-CodePen
-Replit
+Designed and developed by **Tabitha-Dev**. Connect with me:
+
+- [LinkedIn](https://www.linkedin.com/in/tabitha-dev/)  
+- [GitHub](https://github.com/tabitha-dev/)  
+- [CodePen](https://codepen.io/tabitha-dev/)  
+- [Replit](https://replit.com/@TabithaK/)  
 
 ---
-📄 License
-This project is open-source and licensed under the MIT License. Feel free to modify and share.
----
-💡 Inspirational Quote
-"Believe you can and you're halfway there." – Theodore Roosevelt
 
-🚀 Try the App and Boost Your Productivity!
+## 📄 License
+
+📜 This project is **open-source** and licensed under the **MIT License**. Feel free to modify and share.
+
+---
+
+## 💡 Inspirational Quote
+
+> *"Believe you can and you're halfway there."* – Theodore Roosevelt  
+
+---
+
+## 🚀 Try the App and Boost Your Productivity!
+
