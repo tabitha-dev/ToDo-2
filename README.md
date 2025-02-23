@@ -15,6 +15,10 @@ An interactive **Todo App** designed with Vue.js and styled beautifully with res
 - **💾 Persistent Storage:** Saves your tasks locally so your list is preserved even after refreshing.  
 
 ---
+## 🎯 Try It Out  
+
+🚀 **Experience the live demo:** [Click here](https://tabitha-dev.github.io/ToDo-2/)  
+---
 
 ## 📖 How to Use
 
